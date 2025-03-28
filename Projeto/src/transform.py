@@ -1,17 +1,21 @@
 import pandas as pd
 
-'''
 def calc_horas(coluna_tempo_voo):
-    return coluna_transformada_hora
-
+    """Converte minutos para horas, com uma casa decimal."""
+    return coluna_tempo_voo / 60.0
 
 def classifica_turno(coluna_data_hora):
-    
-    Regra de classificação:
-    06:00 - 12:00 : MANHÃ
-    12:00 - 18:00 : TARDE
-    18:00 - 00:00 : NOITE
-    00:00 - 06:00 : MADRUGADA
+    """Classifica o turno do dia baseado no horário."""
+    horarios = pd.to_datetime(coluna_data_hora).dt.hour
 
-    return coluna_turno
-'''
+    def get_turno(h):
+        if 6 <= h < 12:
+            return 'MANHÃ'
+        elif 12 <= h < 18:
+            return 'TARDE'
+        elif 18 <= h < 24:
+            return 'NOITE'
+        else:
+            return 'MADRUGADA'
+
+    return horarios.apply(get_turno)

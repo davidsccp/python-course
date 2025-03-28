@@ -9,7 +9,15 @@ from sqlalchemy import create_engine
 df = pd.read_csv(
     "https://raw.githubusercontent.com/JackyP/testing/master/datasets/nycflights.csv",
     index_col=0)
-metadata = pd.read_excel("assets/metadado.xlsx")
+metadata = pd.read_excel("assets/metadado.xlsx", index_col=None)
+
+# Criar a coluna date_time a partir de year, month, day e dep_time
+df['dep_time'] = df['dep_time'].apply(lambda x: f"{int(x):04d}" if not pd.isna(x) else "0000")
+df['hour'] = df['dep_time'].str[:2].astype(int)
+df['minute'] = df['dep_time'].str[2:].astype(int)
+df['date_time'] = pd.to_datetime(df[['year', 'month', 'day', 'hour', 'minute']])
+
+print("Colunas do dataframe original:", df.columns.tolist())
 
 # 2. Limpeza de dados
 cleaner = DataClean(df, metadata)
@@ -19,6 +27,8 @@ cleaner.select_nnull_cols()
 cleaner.select_nneg_cols()
 cleaner.data_type()
 df_limpo = cleaner.return_data()
+
+print("Colunas após limpeza:", df_limpo.columns.tolist())
 
 # 3. Transformações adicionais
 df_limpo['tempo_voo_horas'] = calc_horas(df_limpo['tempo_voo'])
