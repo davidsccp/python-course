@@ -17,8 +17,6 @@ df['hour'] = df['dep_time'].str[:2].astype(int)
 df['minute'] = df['dep_time'].str[2:].astype(int)
 df['date_time'] = pd.to_datetime(df[['year', 'month', 'day', 'hour', 'minute']])
 
-print("Colunas do dataframe original:", df.columns.tolist())
-
 # 2. Limpeza de dados
 cleaner = DataClean(df, metadata)
 cleaner.select_cols()
@@ -27,8 +25,6 @@ cleaner.select_nnull_cols()
 cleaner.select_nneg_cols()
 cleaner.data_type()
 df_limpo = cleaner.return_data()
-
-print("Colunas após limpeza:", df_limpo.columns.tolist())
 
 # 3. Transformações adicionais
 df_limpo['tempo_voo_horas'] = calc_horas(df_limpo['tempo_voo'])

@@ -20,4 +20,4 @@ def create_db(engine):
         # criar as novas colunas aqui
     )
 
-    flights.create(engine)
+    flights.create(engine, checkfirst=True)
